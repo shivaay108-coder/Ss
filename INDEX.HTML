@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Emotional Voice AI V2</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #070710;
+    color: #f5f3ff;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 25px 12px;
+    text-align: center;
+    background: linear-gradient(140deg,#1b0a32,#080817);
+    border-bottom: 1px solid #7136cc;
+}
+
+header h1 {
+    margin: 0;
+    color: #d8b4fe;
+    text-shadow: 0 0 20px #9333ea;
+    font-size: 27px;
+}
+
+header p {
+    color: #a5a0ba;
+    font-size: 13px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 15px;
+}
+
+.panel {
+    background: #11111e;
+    border: 1px solid #292942;
+    border-radius: 17px;
+    padding: 18px;
+    margin-bottom: 17px;
+}
+
+h2, h3 {
+    color: #c4b5fd;
+}
+
+label {
+    display: block;
+    color: #b9b4d5;
+    font-size: 14px;
+    margin: 15px 0 8px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    background: #080812;
+    color: white;
+    border: 1px solid #454565;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #a855f7;
+    box-shadow: 0 0 12px #9333ea44;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    background: #080812;
+    color: white;
+    border: 1px solid #41415f;
+    font-size: 14px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #a855f7;
+}
+
+.value {
+    color: #e9d5ff;
+    float: right;
+}
+
+button {
+    background: #25253b;
+    color: white;
+    padding: 13px;
+    border: 1px solid #393953;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(.97);
+}
+
+.primary {
+    background: linear-gradient(135deg,#9333ea,#4f46e5);
+    border: none;
+    box-shadow: 0 0 15px #9333ea33;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.wave {
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 12px;
+    background: #080812;
+    margin: 15px 0;
+}
+
+.wave span {
+    width: 4px;
+    height: 12px;
+    background: #a855f7;
+    border-radius: 5px;
+}
+
+.wave.active span {
+    animation: wave 0.6s ease-in-out infinite alternate;
+}
+
+.wave span:nth-child(3n) {
+    animation-delay: .2s;
+}
+
+.wave span:nth-child(2n) {
+    animation-delay: .1s;
+}
+
+@keyframes wave {
+    from { height: 10px; }
+    to { height: 55px; }
+}
+
+.status {
+    text-align: center;
+    color: #c4b5fd;
+    font-size: 13px;
+}
+
+.info {
+    color: #8f8ba8;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+@media(max-width:480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1> DARK EMOTIONAL VOICE AI </h1>
+    <p>Natural Voice • Emotional Acting • Cinematic Audio</p>
+</header>
+
+<div class="container">
+
+<div class="panel">
+
+<h2>🎙 Text To Voice Studio</h2>
+
+<label>Write Your Text / Dialogue</label>
+
+<textarea id="text"
+placeholder="अपना टेक्स्ट यहाँ लिखें...&#10;&#10;Example: मैं अकेला नहीं हूँ... मेरे अंदर एक तूफान है।"></textarea>
+
+<div class="grid">
+
+<div>
+<label>Language</label>
+<select id="language">
+    <option value="hi">Hindi</option>
+    <option value="en">English</option>
+    <option value="ja">Japanese</option>
+    <option value="es">Spanish</option>
+    <option value="fr">French</option>
+    <option value="de">German</option>
+    <option value="all">All Languages</option>
+</select>
+</div>
+
+<div>
+<label>Gender / Voice Category</label>
+<select id="gender">
+    <option value="all">All Voices</option>
+    <option value="female">Female / Girl</option>
+    <option value="male">Male / Boy</option>
+</select>
+</div>
+
+<div>
+<label>Choose Voice Character</label>
+<select id="character">
+
+    <option value="natural">Natural Human</option>
+    <option value="deepMale">Deep Cinematic Male</option>
+    <option value="darkMale">Dark Villain Male</option>
+    <option value="emotionalMale">Emotional Male</option>
+    <option value="softMale">Soft Gentle Male</option>
+    <option value="animeMale">Anime Hero Male</option>
+
+    <option value="naturalFemale">Natural Female</option>
+    <option value="emotionalFemale">Emotional Female</option>
+    <option value="sadGirl">Sad Girl</option>
+    <option value="darkFemale">Dark Female</option>
+    <option value="softFemale">Soft Female</option>
+    <option value="animeGirl">Anime Girl</option>
+
+</select>
+</div>
+
+<div>
+<label>Choose Actual Voice</label>
+<select id="voice"></select>
+</div>
+
+<div>
+<label>Emotion</label>
+<select id="emotion">
+    <option value="natural">Natural</option>
+    <option value="sad">Sad</option>
+    <option value="emotional">Emotional</option>
+    <option value="dark">Dark</option>
+    <option value="happy">Happy</option>
+    <option value="angry">Angry</option>
+    <option value="calm">Calm</option>
+    <option value="fear">Fearful</option>
+    <option value="dramatic">Dramatic</option>
+    <option value="whisper">Whisper-like</option>
+    <option value="excited">Excited</option>
+</select>
+</div>
+
+<div>
+<label>Emotion Intensity</label>
+<select id="intensity">
+    <option value="1">Low</option>
+    <option value="2">Medium</option>
+    <option value="3">High</option>
+    <option value="4">Extreme</option>
+</select>
+</div>
+
+</div>
+
+<label>
+    Speed <span class="value" id="speedValue">1.0x</span>
+</label>
+<input type="range" id="speed"
+min="0.5" max="1.8" step="0.05" value="1">
+
+<label>
+    Pitch <span class="value" id="pitchValue">1.0</span>
+</label>
+<input type="range" id="pitch"
+min="0.5" max="1.8" step="0.05" value="1">
+
+<label>
+    Volume <span class="value" id="volumeValue">100%</span>
+</label>
+<input type="range" id="volume"
+min="0" max="1" step="0.05" value="1">
+
+<label>
+    Sentence Pause
+    <span class="value" id="pauseValue">500 ms</span>
+</label>
+<input type="range" id="pause"
+min="150" max="1500" step="50" value="500">
+
+<div class="wave" id="wave">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+    <span></span><span></span>
+</div>
+
+<div class="buttons">
+
+<button class="primary" onclick="generate()">
+    ▶ Generate Voice
+</button>
+
+<button onclick="preview()">
+    🎧 Voice Preview
+</button>
+
+<button onclick="pauseVoice()">
+    ⏸ Pause
+</button>
+
+<button onclick="resumeVoice()">
+    ▶ Resume
+</button>
+
+<button onclick="stopVoice()">
+    ⏹ Stop
+</button>
+
+<button onclick="clearText()">
+    🗑 Clear Text
+</button>
+
+</div>
+
+<p class="status" id="status">
+    Voice Studio Ready
+</p>
+
+<p class="info" id="voiceInfo">
+    Loading available voices...
+</p>
+
+</div>
+
+<div class="panel">
+
+<h3>✨ Emotional Voice Engine</h3>
+
+<p class="info">
+Voice character presets modify speech speed, pitch and
+sentence pauses. Different actual voices can be selected
+from your browser's available voice library.
+</p>
+
+<p class="info">
+Note: Browser Speech Synthesis does not provide a standard
+emotion-acting control. True sadness, anger, crying,
+whispering and cinematic acting require an expressive
+AI voice engine. The selected emotion here is an expressive
+speech preset, not guaranteed human emotional acting.
+</p>
+
+</div>
+
+</div>
+
+<footer>
+DARK EMOTIONAL VOICE AI V2
+</footer>
+
+<script>
+
+const synth = window.speechSynthesis;
+
+const textBox = document.getElementById("text");
+const language = document.getElementById("language");
+const gender = document.getElementById("gender");
+const character = document.getElementById("character");
+const emotion = document.getElementById("emotion");
+const intensity = document.getElementById("intensity");
+
+const voiceSelect = document.getElementById("voice");
+
+const speed = document.getElementById("speed");
+const pitch = document.getElementById("pitch");
+const volume = document.getElementById("volume");
+const pause = document.getElementById("pause");
+
+const statusText = document.getElementById("status");
+const voiceInfo = document.getElementById("voiceInfo");
+const wave = document.getElementById("wave");
+
+let voices = [];
+let selectedVoice = null;
+
+let sentences = [];
+let sentenceIndex = 0;
+let isPlaying = false;
+let currentJob = 0;
+let pauseTimer = null;
+
+function loadVoices() {
+
+    voices = synth.getVoices();
+
+    updateVoices();
+}
+
+function updateVoices() {
+
+    const lang = language.value;
+    const type = gender.value;
+
+    voiceSelect.innerHTML = "";
+
+    let filtered = voices.filter(v => {
+
+        if (lang !== "all") {
+
+            if (!v.lang.toLowerCase().startsWith(lang)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    if (type !== "all") {
+
+        filtered = filtered.filter(v => {
+
+            const name = v.name.toLowerCase();
+
+            const female =
+            /female|woman|girl|zira|samantha|karen|susan|aria|jenny|sara|google.*female/i;
+
+            const male =
+            /male|man|boy|david|mark|daniel|alex|george|guy|google.*male/i;
+
+            if (type === "female") {
+                return female.test(name) && !male.test(name);
+            }
+
+            if (type === "male") {
+                return male.test(name) && !female.test(name);
+            }
+
+            return true;
+        });
+    }
+
+    if (filtered.length === 0) {
+
+        const option = document.createElement("option");
+
+        option.value = "";
+        option.textContent = "No matching voices found";
+
+        voiceSelect.appendChild(option);
+
+        voiceInfo.textContent =
+        "No voices matched this filter. Try All Voices.";
+
+        return;
+    }
+
+    filtered.forEach(v => {
+
+        const option = document.createElement("option");
+
+        option.value = voices.indexOf(v);
+
+        option.textContent =
+        v.name + " — " + v.lang;
+
+        voiceSelect.appendChild(option);
+    });
+
+    voiceInfo.textContent =
+    filtered.length + " available voice(s). " +
+    "Voice gender labels are estimated from voice names.";
+}
+
+function getSelectedVoice() {
+
+    const index = Number(voiceSelect.value);
+
+    return voices[index] || null;
+}
+
+language.addEventListener("change", updateVoices);
+gender.addEventListener("change", updateVoices);
+
+synth.onvoiceschanged = loadVoices;
+
+loadVoices();
+
+speed.oninput = () => {
+    document.getElementById("speedValue").textContent =
+    Number(speed.value).toFixed(2) + "x";
+};
+
+pitch.oninput = () => {
+    document.getElementById("pitchValue").textContent =
+    Number(pitch.value).toFixed(2);
+};
+
+volume.oninput = () => {
+    document.getElementById("volumeValue").textContent =
+    Math.round(volume.value * 100) + "%";
+};
+
+pause.oninput = () => {
+    document.getElementById("pauseValue").textContent =
+    pause.value + " ms";
+};
+
+
+// CHARACTER PRESETS
+
+const characters = {
+
+    natural: {
+        rate: 1,
+        pitch: 1
+    },
+
+    deepMale: {
+        rate: 0.78,
+        pitch: 0.72
+    },
+
+    darkMale: {
+        rate: 0.70,
+        pitch: 0.65
+    },
+
+    emotionalMale: {
+        rate: 0.82,
+        pitch: 0.90
+    },
+
+    softMale: {
+        rate: 0.88,
+        pitch: 0.95
+    },
+
+    animeMale: {
+        rate: 1.08,
+        pitch: 1.15
+    },
+
+    naturalFemale: {
+        rate: 1,
+        pitch: 1.12
+    },
+
+    emotionalFemale: {
+        rate: 0.82,
+        pitch: 1.08
+    },
+
+    sadGirl: {
+        rate: 0.72,
+        pitch: 1.12
+    },
+
+    darkFemale: {
+        rate: 0.75,
+        pitch: 0.88
+    },
+
+    softFemale: {
+        rate: 0.88,
+        pitch: 1.18
+    },
+
+    animeGirl: {
+        rate: 1.12,
+        pitch: 1.40
+    }
+
+};
+
+
+// EMOTION PRESETS
+
+const emotions = {
+
+    natural: {
+        rate: 1,
+        pitch: 1
+    },
+
+    sad: {
+        rate: 0.78,
+        pitch: 0.92
+    },
+
+    emotional: {
+        rate: 0.88,
+        pitch: 1.08
+    },
+
+    dark: {
+        rate: 0.75,
+        pitch: 0.78
+    },
+
+    happy: {
+        rate: 1.15,
+        pitch: 1.15
+    },
+
+    angry: {
+        rate: 1.12,
+        pitch: 0.90
+    },
+
+    calm: {
+        rate: 0.85,
+        pitch: 1
+    },
+
+    fear: {
+        rate: 1.08,
+        pitch: 1.20
+    },
+
+    dramatic: {
+        rate: 0.72,
+        pitch: 0.95
+    },
+
+    whisper: {
+        rate: 0.82,
+        pitch: 0.90
+    },
+
+    excited: {
+        rate: 1.25,
+        pitch: 1.25
+    }
+
+};
+
+
+function getSettings() {
+
+    const c = characters[character.value];
+    const e = emotions[emotion.value];
+
+    const strength = Number(intensity.value);
+
+    // Blend emotion effects by intensity.
+    // Intensity 1 = mild, 4 = strong.
+
+    const emotionAmount = strength / 4;
+
+    let rate =
+    Number(speed.value) *
+    (1 + (e.rate - 1) * emotionAmount) *
+    c.rate;
+
+    let pitchValue =
+    Number(pitch.value) *
+    (1 + (e.pitch - 1) * emotionAmount) *
+    c.pitch;
+
+    rate = Math.max(0.5, Math.min(rate, 1.8));
+
+    pitchValue =
+    Math.max(0.5, Math.min(pitchValue, 1.8));
+
+    return {
+        rate: rate,
+        pitch: pitchValue,
+        volume: Number(volume.value)
+    };
+}
+
+
+// SENTENCE PROCESSING
+
+function splitSentences(text) {
+
+    return text
+    .match(/[^.!?。！？\n]+[.!?。！？]?/g)
+    ?.map(s => s.trim())
+    .filter(Boolean) || [];
+}
+
+
+// SPEECH ENGINE
+
+function generate() {
+
+    const text = textBox.value.trim();
+
+    if (!text) {
+
+        statusText.textContent =
+        "Please enter your text.";
+
+        return;
+    }
+
+    stopVoice();
+
+    sentences = splitSentences(text);
+
+    sentenceIndex = 0;
+
+    selectedVoice = getSelectedVoice();
+
+    currentJob++;
+
+    const job = currentJob;
+
+    isPlaying = true;
+
+    wave.classList.add("active");
+
+    statusText.textContent =
+    "Generating emotional voice...";
+
+    speakNext(job);
+}
+
+
+function speakNext(job) {
+
+    if (job !== currentJob || !isPlaying) {
+        return;
+    }
+
+    if (sentenceIndex >= sentences.length) {
+
+        isPlaying = false;
+
+        wave.classList.remove("active");
+
+        statusText.textContent =
+        "Audio completed.";
+
+        return;
+    }
+
+    const sentence = sentences[sentenceIndex];
+
+    const utterance =
+    new SpeechSynthesisUtterance(sentence);
+
+    const settings = getSettings();
+
+    if (selectedVoice) {
+
+        utterance.voice = selectedVoice;
+
+        utterance.lang = selectedVoice.lang;
+    }
+
+    utterance.rate = settings.rate;
+    utterance.pitch = settings.pitch;
+    utterance.volume = settings.volume;
+
+    utterance.onstart = () => {
+
+        statusText.textContent =
+        "Playing sentence " +
+        (sentenceIndex + 1) +
+        " of " +
+        sentences.length;
+    };
+
+    utterance.onend = () => {
+
+        if (job !== currentJob || !isPlaying) {
+            return;
+        }
+
+        sentenceIndex++;
+
+        // Pause between sentences for dramatic pacing.
+
+        pauseTimer = setTimeout(() => {
+
+            speakNext(job);
+
+        }, Number(pause.value));
+    };
+
+    utterance.onerror = (event) => {
+
+        if (job !== currentJob) {
+            return;
+        }
+
+        isPlaying = false;
+
+        wave.classList.remove("active");
+
+        statusText.textContent =
+        "Voice error: " + event.error;
+    };
+
+    synth.speak(utterance);
+}
+
+
+function preview() {
+
+    stopVoice();
+
+    selectedVoice = getSelectedVoice();
+
+    const utterance =
+    new SpeechSynthesisUtterance(
+    "Hello. This is your selected voice character. Welcome to the voice studio."
+    );
+
+    const settings = getSettings();
+
+    if (selectedVoice) {
+
+        utterance.voice = selectedVoice;
+
+        utterance.lang = selectedVoice.lang;
+    }
+
+    utterance.rate = settings.rate;
+    utterance.pitch = settings.pitch;
+    utterance.volume = settings.volume;
+
+    synth.speak(utterance);
+
+    statusText.textContent =
+    "Previewing selected voice.";
+}
+
+
+function pauseVoice() {
+
+    synth.pause();
+
+    statusText.textContent = "Paused.";
+}
+
+
+function resumeVoice() {
+
+    synth.resume();
+
+    statusText.textContent = "Resumed.";
+}
+
+
+function stopVoice() {
+
+    currentJob++;
+
+    isPlaying = false;
+
+    clearTimeout(pauseTimer);
+
+    synth.cancel();
+
+    wave.classList.remove("active");
+
+    statusText.textContent = "Stopped.";
+}
+
+
+function clearText() {
+
+    stopVoice();
+
+    textBox.value = "";
+
+    statusText.textContent = "Text cleared.";
+}
+
+</script>
+
+</body>
+</html>
