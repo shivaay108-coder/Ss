@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Voice AI Studio</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #080811;
+    color: white;
+}
+
+header {
+    text-align: center;
+    padding: 25px 10px;
+    background: linear-gradient(135deg, #160b2b, #09091a);
+    border-bottom: 1px solid #6d28d9;
+}
+
+header h1 {
+    color: #c084fc;
+    text-shadow: 0 0 15px #9333ea;
+    margin: 0;
+}
+
+header p {
+    color: #aaa;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    padding: 18px;
+}
+
+.panel {
+    background: #12121f;
+    border: 1px solid #292941;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px #6d28d910;
+}
+
+label {
+    display: block;
+    margin: 15px 0 8px;
+    color: #c4b5fd;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    resize: vertical;
+    background: #080811;
+    color: white;
+    border: 1px solid #444466;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    outline: none;
+}
+
+textarea:focus {
+    border-color: #a855f7;
+    box-shadow: 0 0 12px #9333ea55;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    background: #090915;
+    color: white;
+    border: 1px solid #444466;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #a855f7;
+}
+
+button {
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    background: #292941;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.primary {
+    background: linear-gradient(135deg, #9333ea, #4f46e5);
+    box-shadow: 0 0 15px #9333ea44;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.wave {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 85px;
+    background: #090915;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.wave span {
+    width: 5px;
+    height: 15px;
+    border-radius: 10px;
+    background: #a855f7;
+}
+
+.wave.playing span {
+    animation: sound 0.65s infinite alternate;
+}
+
+.wave span:nth-child(2n) {
+    animation-delay: 0.2s;
+}
+
+.wave span:nth-child(3n) {
+    animation-delay: 0.4s;
+}
+
+@keyframes sound {
+    from { height: 10px; }
+    to { height: 55px; }
+}
+
+.status {
+    color: #a78bfa;
+    text-align: center;
+    margin-top: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+@media(max-width: 500px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1> DARK VOICE AI </h1>
+    <p>Natural • Emotional • Dark Audio Studio</p>
+</header>
+
+<div class="container">
+
+<div class="panel">
+
+    <h2>🎙 Text To Audio</h2>
+
+    <label>Enter Your Text</label>
+
+    <textarea id="text"
+    placeholder="Write your emotional story, dialogue or text here..."></textarea>
+
+    <div class="grid">
+
+        <div>
+            <label>Language</label>
+            <select id="language">
+                <option value="hi">Hindi</option>
+                <option value="en">English</option>
+                <option value="ja">Japanese</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="all">All Available</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Voice Type</label>
+            <select id="gender">
+                <option value="all">All Voices</option>
+                <option value="female">Female / Girl</option>
+                <option value="male">Male / Boy</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Emotion Style</label>
+            <select id="emotion">
+                <option value="natural">Natural</option>
+                <option value="emotional">Emotional</option>
+                <option value="dark">Dark</option>
+                <option value="sad">Sad</option>
+                <option value="happy">Happy</option>
+                <option value="angry">Angry</option>
+                <option value="calm">Calm</option>
+                <option value="anime">Anime</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Available Voice</label>
+            <select id="voice"></select>
+        </div>
+
+    </div>
+
+    <label>
+        Speed:
+        <span id="speedValue">1.0</span>
+    </label>
+
+    <input id="speed" type="range"
+    min="0.5" max="2" step="0.1" value="1">
+
+    <label>
+        Pitch:
+        <span id="pitchValue">1.0</span>
+    </label>
+
+    <input id="pitch" type="range"
+    min="0.5" max="2" step="0.1" value="1">
+
+    <label>
+        Volume:
+        <span id="volumeValue">100%</span>
+    </label>
+
+    <input id="volume" type="range"
+    min="0" max="1" step="0.1" value="1">
+
+    <div class="wave" id="wave">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span>
+    </div>
+
+    <div class="controls">
+
+        <button class="primary" onclick="speakText()">
+            ▶ Generate & Speak
+        </button>
+
+        <button onclick="pauseSpeech()">
+            ⏸ Pause
+        </button>
+
+        <button onclick="resumeSpeech()">
+            ▶ Resume
+        </button>
+
+        <button onclick="stopSpeech()">
+            ⏹ Stop
+        </button>
+
+    </div>
+
+    <p class="status" id="status">
+        Ready to generate voice
+    </p>
+
+</div>
+
+<div class="panel">
+
+    <h3>✨ Voice Studio</h3>
+
+    <p>
+        Select your language, voice and emotional style.
+        Adjust pitch and speed to create your desired voice.
+    </p>
+
+    <button onclick="previewVoice()" class="primary">
+        🎧 Preview Selected Voice
+    </button>
+
+</div>
+
+</div>
+
+<footer>
+    DARK VOICE AI STUDIO
+</footer>
+
+<script>
+
+const synth = window.speechSynthesis;
+
+const textBox = document.getElementById("text");
+const language = document.getElementById("language");
+const gender = document.getElementById("gender");
+const emotion = document.getElementById("emotion");
+const voiceSelect = document.getElementById("voice");
+
+const speed = document.getElementById("speed");
+const pitch = document.getElementById("pitch");
+const volume = document.getElementById("volume");
+
+const statusText = document.getElementById("status");
+const wave = document.getElementById("wave");
+
+let voices = [];
+
+function loadVoices() {
+
+    voices = synth.getVoices();
+
+    updateVoiceList();
+}
+
+function updateVoiceList() {
+
+    const selectedLang = language.value;
+    const selectedGender = gender.value;
+
+    voiceSelect.innerHTML = "";
+
+    let filtered = voices.filter(v => {
+
+        if (selectedLang !== "all") {
+            if (!v.lang.toLowerCase()
+                .startsWith(selectedLang)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    if (selectedGender !== "all") {
+
+        filtered = filtered.filter(v => {
+
+            const name = v.name.toLowerCase();
+
+            if (selectedGender === "female") {
+                return /female|woman|girl|zira|samantha|karen|susan|aria|jenny|google.*female/i
+                .test(name);
+            }
+
+            if (selectedGender === "male") {
+                return /male|man|boy|david|mark|daniel|alex|george|google.*male/i
+                .test(name);
+            }
+
+            return true;
+        });
+    }
+
+    if (filtered.length === 0) {
+
+        const option = document.createElement("option");
+
+        option.textContent =
+        "No matching voices available";
+
+        option.value = "";
+
+        voiceSelect.appendChild(option);
+
+        return;
+    }
+
+    filtered.forEach((v, i) => {
+
+        const option = document.createElement("option");
+
+        option.value = voices.indexOf(v);
+
+        option.textContent =
+        v.name + " (" + v.lang + ")";
+
+        voiceSelect.appendChild(option);
+    });
+}
+
+synth.onvoiceschanged = loadVoices;
+
+loadVoices();
+
+language.addEventListener("change", updateVoiceList);
+gender.addEventListener("change", updateVoiceList);
+
+speed.oninput = () => {
+    document.getElementById("speedValue").textContent =
+    speed.value;
+};
+
+pitch.oninput = () => {
+    document.getElementById("pitchValue").textContent =
+    pitch.value;
+};
+
+volume.oninput = () => {
+    document.getElementById("volumeValue").textContent =
+    Math.round(volume.value * 100) + "%";
+};
+
+function getEmotionSettings() {
+
+    let rate = Number(speed.value);
+    let pitchValue = Number(pitch.value);
+
+    switch (emotion.value) {
+
+        case "dark":
+            rate *= 0.75;
+            pitchValue *= 0.75;
+            break;
+
+        case "sad":
+            rate *= 0.80;
+            pitchValue *= 0.90;
+            break;
+
+        case "emotional":
+            rate *= 0.90;
+            pitchValue *= 1.05;
+            break;
+
+        case "happy":
+            rate *= 1.20;
+            pitchValue *= 1.20;
+            break;
+
+        case "angry":
+            rate *= 1.15;
+            pitchValue *= 0.90;
+            break;
+
+        case "calm":
+            rate *= 0.85;
+            pitchValue *= 1.00;
+            break;
+
+        case "anime":
+            pitchValue *= 1.35;
+            rate *= 1.10;
+            break;
+    }
+
+    return {
+        rate: Math.max(0.1, Math.min(rate, 2)),
+        pitch: Math.max(0, Math.min(pitchValue, 2))
+    };
+}
+
+function speakText() {
+
+    const text = textBox.value.trim();
+
+    if (!text) {
+
+        statusText.textContent =
+        "Please enter some text first!";
+
+        return;
+    }
+
+    synth.cancel();
+
+    const utterance =
+    new SpeechSynthesisUtterance(text);
+
+    const selectedVoice =
+    voices[Number(voiceSelect.value)];
+
+    if (selectedVoice) {
+
+        utterance.voice = selectedVoice;
+
+        utterance.lang = selectedVoice.lang;
+    }
+
+    const settings = getEmotionSettings();
+
+    utterance.rate = settings.rate;
+
+    utterance.pitch = settings.pitch;
+
+    utterance.volume = Number(volume.value);
+
+    utterance.onstart = () => {
+
+        statusText.textContent =
+        "Playing " + emotion.value + " voice...";
+
+        wave.classList.add("playing");
+    };
+
+    utterance.onend = () => {
+
+        statusText.textContent =
+        "Audio completed!";
+
+        wave.classList.remove("playing");
+    };
+
+    utterance.onerror = (event) => {
+
+        statusText.textContent =
+        "Voice error: " + event.error;
+
+        wave.classList.remove("playing");
+    };
+
+    synth.speak(utterance);
+}
+
+function pauseSpeech() {
+
+    synth.pause();
+
+    statusText.textContent = "Paused";
+}
+
+function resumeSpeech() {
+
+    synth.resume();
+
+    statusText.textContent = "Resumed";
+}
+
+function stopSpeech() {
+
+    synth.cancel();
+
+    wave.classList.remove("playing");
+
+    statusText.textContent = "Stopped";
+}
+
+function previewVoice() {
+
+    const selectedVoice =
+    voices[Number(voiceSelect.value)];
+
+    const utterance =
+    new SpeechSynthesisUtterance(
+    "Hello! Welcome to Dark Voice AI Studio."
+    );
+
+    if (selectedVoice) {
+
+        utterance.voice = selectedVoice;
+
+        utterance.lang = selectedVoice.lang;
+    }
+
+    const settings = getEmotionSettings();
+
+    utterance.rate = settings.rate;
+
+    utterance.pitch = settings.pitch;
+
+    utterance.volume = Number(volume.value);
+
+    synth.cancel();
+
+    synth.speak(utterance);
+}
+
+</script>
+
+</body>
+  </html>
+  
